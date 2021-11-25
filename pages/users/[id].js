@@ -13,6 +13,7 @@ export default function detail(props) {
       <Sidebar />
       <div className="content d-flex align-items-center">
       <h1 className="title">{data.first_name + ' ' + data.last_name}'s Photo</h1>
+			<h3 className="title">{data.email}</h3>
       <div>
         <Image src={data.avatar} width="300" height="300" className="rounded-circle my-3"/>
       </div>
