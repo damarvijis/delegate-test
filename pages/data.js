@@ -9,18 +9,27 @@ import Head from 'next/head'
 export default function Home(props) {
   const { dataUser, pages } = props
   const [page, setPage] = useState(pages)
+  const [dataSearch, setDataSearch] = useState([])
   const [value, setValue] = useState('')
   const [maxPage, setMaxPage] = useState(dataUser.total_pages)
   
   const router = useRouter()
   let items = []
 
-  function submitSearch () {
-    router.push(`/?value=${value}`)
+  function submitSearch (e) {
+    e.preventDefault()
+    let words = value.split(' ')
+    let search = words.map(e => e.charAt(0).toUpperCase() + e.slice(1))
+    const result = dataUser.data.filter(el => el.first_name.includes(search[0]) || el.last_name.includes(search[1]) || el.email.includes(value))
+    setDataSearch(result)
   }
 
   function handleChange (event) {
+    let words = event.target.value.split(' ')
+    let search = words.map(e => e.charAt(0).toUpperCase() + e.slice(1))
     setValue(event.target.value)
+    const result = dataUser.data.filter(el => el.first_name.includes(search[0]) || el.first_name.includes(search[1]) || el.email.includes(event.target.value))
+    setDataSearch(result)
   }
 
   for (let i = 0; i < maxPage; i++) {
@@ -41,7 +50,7 @@ export default function Home(props) {
       <title>Data Page</title>
     </Head>
     <div className="myContainer">
-      <Sidebar />
+      <Sidebar/>
       <div className="content">
         <div className="d-flex flex-row">
           <div className="me-3"><Image src="/pencil.png" height="47" width="47" alt="pencil" /></div>
@@ -73,7 +82,14 @@ export default function Home(props) {
             <div className="col-3"><h6>EMAIL</h6></div>
             <div><h6>NAME</h6></div>
           </div>
-          {
+          { dataSearch.length != 0 ? dataSearch.map(e => { 
+          return (<div className="tab-body" key={e.id} onClick={() => {
+                  e > 6 ? router.push(`/user/${e.id}`) : router.push(`/users/${e.id}`)
+                }}>
+                  <p className="col-3">{e.id}</p>
+                  <p className="col-3">{e.email}</p>
+                  <p>{e.first_name + ' ' + e.last_name}</p>
+                </div>)}) :
             dataUser.data.map(e => {
               return(
                 <div className="tab-body" key={e.id} onClick={() => {

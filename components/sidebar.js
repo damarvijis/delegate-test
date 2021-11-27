@@ -23,7 +23,7 @@ export default function sidebar() {
   });
 
   return (
-    <div className="sidebar col-2">
+    <div className="sidebar col-2 d-none d-lg-flex">
       <div className="logo">
         <Image src="/logo.png" height="77" width="82" alt="logo" />
       </div>
